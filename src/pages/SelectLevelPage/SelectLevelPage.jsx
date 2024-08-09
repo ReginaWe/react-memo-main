@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
+import { useGameMode } from "../../components/hooks/useGameMode";
 
 export function SelectLevelPage() {
+  const { isEasyMode, setIsEasyMode } = useGameMode();
+
+  const handleEasyModeChange = event => {
+    setIsEasyMode(event.target.checked);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
@@ -25,7 +31,14 @@ export function SelectLevelPage() {
         </ul>
         <div className={styles.gameModeBlock}>
           <p className={styles.gameMode}>Хотите использовать упрощенный режим?</p>
-          <input type="checkbox" name="checkbox" id="checkbox" className={styles.checkbox}></input>
+          <input
+            type="checkbox"
+            name="checkbox"
+            id="checkbox"
+            className={styles.checkbox}
+            onChange={handleEasyModeChange}
+            checked={isEasyMode}
+          ></input>
           <label htmlFor="checkbox" className={styles.checkboxLabel}></label>
         </div>
       </div>

@@ -1,16 +1,9 @@
-import React, { useState } from "react";
+import { createContext, useState } from "react";
 
+export const GameModeContext = createContext(false);
 
-export const gameModeContext = React.createContext(null)
+export function EasyGameMode({ children }) {
+  const [isEasyMode, setIsEasyMode] = useState(false);
 
-export const EasyGameMode ({children}) {
-    const [easyMode, setEasyMode] = useState(false);
-
-    function openEasyMode() {
-        setEasyMode((easyMode) => !easyMode)
-    }
-
-    return <gameModeContext.Provider value={{easyMode, openEasyMode}}>{children}</gameModeContext.Provider>
+  return <GameModeContext.Provider value={{ isEasyMode, setIsEasyMode }}>{children}</GameModeContext.Provider>;
 }
-
-export default EasyGameMode
