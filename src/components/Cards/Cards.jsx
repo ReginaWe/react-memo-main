@@ -60,6 +60,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     minutes: 0,
   });
 
+  const [firstCard, setFirstCard] = useState(null);
+
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
     setStatus(status);
@@ -76,6 +78,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
     setStatus(STATUS_PREVIEW);
+    setFirstCard(null);
+    setLives(isEasyMode ? 3 : 1);
   }
 
   /**
@@ -89,6 +93,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     // Если карта уже открыта, то ничего не делаем
     if (clickedCard.open) {
       return;
+    }
+
+    if (!firstCard) {
+      setFirstCard(clickedCard);
     }
     // Игровое поле после открытия кликнутой карты
     const nextCards = cards.map(card => {
@@ -130,11 +138,20 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // "Игрок проиграл", т.к на поле есть две открытые карты без пары
     if (playerLost) {
-      if (!isEasyMode) {
+      if (!isEasyMode || lives === 0) {
         finishGame(STATUS_LOST);
         return;
       } else {
-        setLives(prev => prev - 1); /* Что означают prev */
+        setTimeout(() => {
+          setLives(prev => prev - 1); /* Что означают prev */
+          setCards(
+            cards.map(card => ({
+              ...card,
+              open: card.open && card.id !== firstCard.id && card.id !== clickedCard.id,
+            })),
+          );
+          setFirstCard(null);
+        }, 500);
       }
     }
 
