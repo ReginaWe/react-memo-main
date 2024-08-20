@@ -4,6 +4,8 @@ import { Button } from "../Button/Button";
 
 import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
+/* import { API } from "../api/leaders";
+import { useState } from "react"; */
 
 export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
   const title = isWon ? "Вы победили!" : "Вы проиграли!";
@@ -12,10 +14,17 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
 
   const imgAlt = isWon ? "celebration emodji" : "dead emodji";
 
+  /*  const [inputValue, setInputValue] = useState("")
+
+  function handleSendStatics() {
+    API.addLeader({ name: inputValue, time: gameDurationMinutes * 60 + gameDurationSeconds });
+  } */
+
   return (
     <div className={styles.modal}>
       <img className={styles.image} src={imgSrc} alt={imgAlt} />
       <h2 className={styles.title}>{title}</h2>
+      {/* input + button */}
       <p className={styles.description}>Затраченное время:</p>
       <div className={styles.time}>
         {gameDurationMinutes.toString().padStart("2", "0")}.{gameDurationSeconds.toString().padStart("2", "0")}

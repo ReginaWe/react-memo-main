@@ -18,13 +18,13 @@ export const API = {
   },
 
   //Добавление лидера в список
-  async addLeader({ token }) {
+  async addLeader({ name, time }) {
     const response = await fetch(this.baseHost, {
       method: "POST",
-      body: JSON.stringify("?"), //  что сюда принять?????
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      body: JSON.stringify({
+        name,
+        time,
+      }), //  что сюда принять?????
     });
 
     if (!response.ok) {

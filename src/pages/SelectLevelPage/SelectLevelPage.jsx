@@ -35,13 +35,22 @@ export function SelectLevelPage() {
       <div className={styles.modal}>
         <h1 className={styles.title}>Выбери сложность</h1>
         <ul className={styles.levels}>
-          <li className={classNames(styles.level, styles.levelLink)} onClick={selectLevelMode}>
+          <li
+            className={classNames(styles.level, styles.levelLink, { [styles.selected]: levelMode === 1 })}
+            onClick={selectLevelMode}
+          >
             1
           </li>
-          <li className={classNames(styles.level, styles.levelLink)} onClick={selectLevelMode}>
+          <li
+            className={classNames(styles.level, styles.levelLink, { [styles.selected]: levelMode === 2 })}
+            onClick={selectLevelMode}
+          >
             2
           </li>
-          <li className={classNames(styles.level, styles.levelLink)} onClick={selectLevelMode}>
+          <li
+            className={classNames(styles.level, styles.levelLink, { [styles.selected]: levelMode === 3 })}
+            onClick={selectLevelMode}
+          >
             3
           </li>
         </ul>

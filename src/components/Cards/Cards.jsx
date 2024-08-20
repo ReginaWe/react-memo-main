@@ -156,6 +156,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     }
 
     // ... игра продолжается
+
+    if (openCardsWithoutPair.length === 0) {
+      setFirstCard(null);
+    }
   };
 
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;

@@ -69,7 +69,7 @@
 }
 
 .checkbox:checked + .checkboxLabel:before {
-  left: calc(100% - 30px);
+  left: calc(100% - 17px);
 }
 
 .title {
@@ -113,6 +113,10 @@
   line-height: 72px;
   text-decoration: none;
   cursor: pointer;
+}
+
+.selected {
+  box-shadow: 0 0 15px #1eb91e;
 }
 
 .levelLink:visited {
