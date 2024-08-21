@@ -1,7 +1,6 @@
 .container {
-  width: 672px;
+  width: 944px;
   margin: 0 auto;
-  padding: 26px;
   padding-top: 22px;
   box-sizing: border-box;
 }
@@ -29,10 +28,43 @@
   font-weight: 400;
   line-height: 32px;
   text-align: left;
-  color: rgba(153, 153, 153, 1);
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding-left: 15px;
   padding-right: 15px;
-  border-radius: 5px;
+  width: 944px;
+  height: 64px;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.listHeader {
+  color: #999999;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+li {
+  list-style-type: none;
+  & p {
+    font-family: StratosSkyeng;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  & p:first-child {
+    width: 178px;
+    margin-right: 66px;
+  }
+  & p:nth-child(2) {
+    width: 324px;
+    margin-right: 66px;
+  }
+  & p:last-child {
+    width: 102px;
+  }
 }
