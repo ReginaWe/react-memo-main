@@ -6,6 +6,7 @@ import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { API } from "../api/leaders";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurationMinutes, onClick }) {
   const title = isSuperWin ? "Вы попали на лидерборд" : isWon ? "Вы победили!" : "Вы проиграли!";
@@ -33,7 +34,12 @@ export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurat
       <h2 className={styles.title}>{title}</h2>
       {isSuperWin && (
         <>
-          <input placeholder="Пользователь" value={inputValue} onChange={handleChangeInputValue} />
+          <input
+            className={styles.inputName}
+            placeholder="Пользователь"
+            value={inputValue}
+            onChange={handleChangeInputValue}
+          />
           <Button onClick={handleSendStatistics}>Отправить</Button>
         </>
       )}
@@ -44,6 +50,9 @@ export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurat
       </div>
 
       <Button onClick={onClick}>Начать сначала</Button>
+      <Link to="/leaderboard" className={styles.leaderLink}>
+        Перейти к лидерборду
+      </Link>
     </div>
   );
 }

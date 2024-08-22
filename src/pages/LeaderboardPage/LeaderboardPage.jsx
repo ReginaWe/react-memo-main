@@ -1,4 +1,4 @@
-/* import { useNavigate } from "react-router-dom"; */
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "../../components/Button/Button";
 import styles from "./LeaderboardPage.module.css";
@@ -6,7 +6,7 @@ import { API } from "../../components/api/leaders";
 import cn from "classnames";
 
 export function LeaderboardPage() {
-  /*  const navigate = useNavigate(); */
+  const navigate = useNavigate();
 
   const [table, setTable] = useState([]);
 
@@ -16,6 +16,10 @@ export function LeaderboardPage() {
       setTable(table);
     });
   }, []);
+
+  function handleStartGame() {
+    navigate("/");
+  }
 
   function showTime(num) {
     const minutes = Math.floor(num / 60);
@@ -27,7 +31,7 @@ export function LeaderboardPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <p className={styles.title}>Лидерборд</p>
-        <Button>Начать игру</Button>
+        <Button onClick={handleStartGame}>Начать игру</Button>
       </div>
       <ul>
         <li className={cn(styles.list, styles.listHeader)}>
