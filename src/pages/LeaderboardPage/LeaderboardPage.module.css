@@ -6,7 +6,7 @@
 }
 
 .title {
-  font-family: Roboto;
+  font-family: StratosSkyeng;
   font-size: 24px;
   font-weight: 400;
   line-height: 32px;
@@ -39,6 +39,58 @@
   box-sizing: border-box;
 }
 
+.achievementContainer {
+  display: flex;
+  gap: 6px;
+}
+
+.achievementBlock {
+  position: relative;
+
+  div {
+    padding: 15px 20px;
+    border-radius: 12px;
+    background: #c2f5ff;
+    width: max-content;
+    height: 78px;
+    font-family: StratosSkyeng;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+    color: #004980;
+    position: absolute;
+    translate: 0 calc(-100% - 13px);
+    box-sizing: border-box;
+    display: none;
+
+    & p {
+      font: inherit;
+    }
+
+    &::before {
+      content: "";
+      clip-path: polygon(0% 100%, 0% 0%, 100% 0%);
+      display: block;
+      position: absolute;
+      width: 20px;
+      height: 14px;
+      top: 73px;
+      left: 14px;
+      background: #c2f5ff;
+    }
+
+    &:has(+ img:hover) {
+      display: block;
+    }
+  }
+
+  img {
+    width: 32px;
+    height: 32px; /* 
+    padding: 3px; */
+  }
+}
 .listHeader {
   color: #999999;
 }
@@ -51,20 +103,28 @@ ul {
 
 li {
   list-style-type: none;
-  & p {
+  & > p {
     font-family: StratosSkyeng;
     font-size: 24px;
     line-height: 32px;
   }
-  & p:first-child {
+  & > p:first-child {
     width: 178px;
     margin-right: 66px;
   }
-  & p:nth-child(2) {
-    width: 324px;
+  & > p:nth-child(2) {
+    width: 227px;
     margin-right: 66px;
   }
-  & p:last-child {
-    width: 102px;
+  & > p,
+  & > div {
+    &:nth-child(3) {
+      width: 194px;
+      margin-right: 66px;
+    }
+  }
+  & > p:last-child {
+    width: 92px;
+    margin-right: 35px;
   }
 }

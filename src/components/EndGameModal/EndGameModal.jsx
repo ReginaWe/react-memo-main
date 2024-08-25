@@ -6,7 +6,7 @@ import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { API } from "../api/leaders";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurationMinutes, onClick }) {
   const title = isSuperWin ? "Вы попали на лидерборд" : isWon ? "Вы победили!" : "Вы проиграли!";
@@ -17,6 +17,8 @@ export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurat
 
   const [inputValue, setInputValue] = useState("");
 
+  const navigate = useNavigate();
+
   function handleChangeInputValue(event) {
     setInputValue(event.target.value);
   }
@@ -26,6 +28,7 @@ export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurat
       name: inputValue || "Пользователь",
       time: gameDurationMinutes * 60 + gameDurationSeconds,
     }).then(() => setInputValue(""));
+    navigate("/leaderboard");
   }
 
   return (

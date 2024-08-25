@@ -5,6 +5,9 @@ import styles from "./LeaderboardPage.module.css";
 import { API } from "../../components/api/leaders";
 import cn from "classnames";
 
+import hardModeImageUrl from "./images/hardMode.svg";
+import noSuperPowerImageUrl from "./images/noSuperPower.svg";
+
 export function LeaderboardPage() {
   const navigate = useNavigate();
 
@@ -37,13 +40,39 @@ export function LeaderboardPage() {
         <li className={cn(styles.list, styles.listHeader)}>
           <p>Позиция</p>
           <p>Пользователь</p>
+          <p>Достижения</p>
           <p>Время</p>
         </li>
         {table.map((record, index) => {
           return (
-            <li className={styles.list}>
+            <li key={index} className={styles.list}>
               <p>#{index + 1}</p>
               <p>{record.name}</p>
+              <div className={styles.achievementContainer}>
+                {
+                  <>
+                    <div className={styles.achievementBlock}>
+                      <div>
+                        <p>
+                          Игра пройдена
+                          <br />в сложном режиме
+                        </p>
+                      </div>
+                      <img src={hardModeImageUrl} alt="hardMode" />
+                    </div>
+                    <div className={styles.achievementBlock}>
+                      <div>
+                        <p>
+                          Игра пройдена
+                          <br />
+                          без супер-сил
+                        </p>
+                      </div>
+                      <img src={noSuperPowerImageUrl} alt="noSuperPower" />
+                    </div>
+                  </>
+                }
+              </div>
               <p>{showTime(record.time)}</p>
             </li>
           );
