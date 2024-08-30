@@ -56,6 +56,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // Дата конца игры
   const [gameEndDate, setGameEndDate] = useState(null);
 
+  const [superPower, setSuperPower] = useState(0);
+
   // Стейт для таймера, высчитывается в setInteval на основе gameStartDate и gameEndDate
   const [timer, setTimer] = useState({
     seconds: 0,
@@ -82,6 +84,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setStatus(STATUS_PREVIEW);
     setFirstCard(null);
     setLives(isEasyMode ? 3 : 1);
+    setSuperPower(0);
   }
 
   /**
@@ -208,11 +211,36 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     }
   }, [lives]);
 
+  function handleSuperPower() {
+    /*  if (superPower !== 0) {
+      return;
+    } */
+    setSuperPower(1);
+    setTimeout(() => {
+      gameStartDate.setSeconds(gameStartDate.getSeconds() + 5);
+      /*  setGameStartDate(gameStartDate); */
+      setSuperPower(2);
+    }, 5000);
+  }
+
+  function getAchievements() {
+    if (status === STATUS_WON) {
+      const result = [];
+      if (pairsCount >= 9) {
+        result.push(1);
+      }
+      if (superPower === 0) {
+        result.push(2);
+      }
+      return result;
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.timer}>
-          {status === STATUS_PREVIEW ? (
+          {status === STATUS_PREVIEW || superPower === 1 ? (
             <div>
               <p className={styles.previewText}>Запоминайте пары!</p>
               <p className={styles.previewDescription}>Игра начнется через {previewSeconds} секунд</p>
@@ -234,15 +262,16 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
         {status === STATUS_IN_PROGRESS && (
           <>
-            <div className={styles.helperWrapper}>
-              <div className={styles.helperHintWrapper} />
-              <img className={styles.helperImage} src={eyeImageUrl} alt="eye" />
-              <div className={styles.helperHintContainer}>
-                <h2>Прозрение</h2>
-                <p>На 5 секунд показываются все карты. Таймер длительности игры на это время останавливается.</p>
+            {superPower === 0 && (
+              <div className={styles.helperWrapper}>
+                <div className={styles.helperHintWrapper} />
+                <img className={styles.helperImage} src={eyeImageUrl} alt="eye" onClick={handleSuperPower} />
+                <div className={styles.helperHintContainer}>
+                  <h2>Прозрение</h2>
+                  <p>На 5 секунд показываются все карты. Таймер длительности игры на это время останавливается.</p>
+                </div>
               </div>
-            </div>
-
+            )}
             <Button onClick={resetGame}>Начать заново</Button>
           </>
         )}
@@ -253,7 +282,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           <Card
             key={card.id}
             onClick={() => openCard(card)}
-            open={status !== STATUS_IN_PROGRESS ? true : card.open}
+            open={status !== STATUS_IN_PROGRESS || superPower === 1 ? true : card.open}
             suit={card.suit}
             rank={card.rank}
           />
@@ -266,7 +295,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         <div className={styles.modalContainer}>
           <EndGameModal
             isWon={status === STATUS_WON}
-            isSuperWin={status === STATUS_WON && !isEasyMode && pairsCount >= 9}
+            achievements={getAchievements()}
             gameDurationSeconds={timer.seconds}
             gameDurationMinutes={timer.minutes}
             onClick={resetGame}

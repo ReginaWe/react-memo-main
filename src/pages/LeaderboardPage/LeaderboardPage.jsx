@@ -7,6 +7,8 @@ import cn from "classnames";
 
 import hardModeImageUrl from "./images/hardMode.svg";
 import noSuperPowerImageUrl from "./images/noSuperPower.svg";
+import greyHardModeImageUrl from "./images/GreyHardMode.svg";
+import greyNoSuperPowerImageUrl from "./images/GreyNoSuperPower.svg";
 
 export function LeaderboardPage() {
   const navigate = useNavigate();
@@ -49,29 +51,35 @@ export function LeaderboardPage() {
               <p>#{index + 1}</p>
               <p>{record.name}</p>
               <div className={styles.achievementContainer}>
-                {
-                  <>
-                    <div className={styles.achievementBlock}>
-                      <div>
-                        <p>
-                          Игра пройдена
-                          <br />в сложном режиме
-                        </p>
-                      </div>
-                      <img src={hardModeImageUrl} alt="hardMode" />
+                {record.achievements.includes(1) ? (
+                  <div className={styles.achievementBlock}>
+                    <div>
+                      <p>
+                        Игра пройдена
+                        <br />в сложном режиме
+                      </p>
                     </div>
-                    <div className={styles.achievementBlock}>
-                      <div>
-                        <p>
-                          Игра пройдена
-                          <br />
-                          без супер-сил
-                        </p>
-                      </div>
-                      <img src={noSuperPowerImageUrl} alt="noSuperPower" />
+
+                    <img src={hardModeImageUrl} alt="hardMode" />
+                  </div>
+                ) : (
+                  <img src={greyHardModeImageUrl} alt="greyHardMode" />
+                )}
+                {record.achievements.includes(2) ? (
+                  <div className={styles.achievementBlock}>
+                    <div>
+                      <p>
+                        Игра пройдена
+                        <br />
+                        без супер-сил
+                      </p>
                     </div>
-                  </>
-                }
+
+                    <img src={noSuperPowerImageUrl} alt="noSuperPower" />
+                  </div>
+                ) : (
+                  <img src={greyNoSuperPowerImageUrl} alt="greyNoSuperPower" />
+                )}
               </div>
               <p>{showTime(record.time)}</p>
             </li>

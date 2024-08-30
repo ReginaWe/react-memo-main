@@ -1,5 +1,5 @@
 export const API = {
-  baseHost: "https://wedev-api.sky.pro/api/leaderboard",
+  baseHost: "https://wedev-api.sky.pro/api/v2/leaderboard",
 
   //Получение списка лидеров
   async getLeaders() {
@@ -14,12 +14,13 @@ export const API = {
   },
 
   //Добавление лидера в список
-  async addLeader({ name, time }) {
+  async addLeader({ name, time, achievements }) {
     const response = await fetch(this.baseHost, {
       method: "POST",
       body: JSON.stringify({
         name,
         time,
+        achievements,
       }), //  что сюда принять?????
     });
 
