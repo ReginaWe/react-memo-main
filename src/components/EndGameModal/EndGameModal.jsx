@@ -7,6 +7,7 @@ import celebrationImageUrl from "./images/celebration.png";
 import { API } from "../api/leaders";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import cn from "classnames";
 
 export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, achievements }) {
   const title = isWon ? "Вы попали на лидерборд" : "Вы проиграли!";
@@ -22,6 +23,9 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
   }
 
   function handleSendStatistics() {
+    if (!inputValue) {
+      return;
+    }
     API.addLeader({
       name: inputValue || "Пользователь",
       time: gameDurationMinutes * 60 + gameDurationSeconds,
@@ -36,7 +40,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       {isWon && (
         <>
           <input
-            className={styles.inputName}
+            className={cn(styles.inputName, { [styles.error]: !inputValue })}
             placeholder="Пользователь"
             value={inputValue}
             onChange={handleChangeInputValue}

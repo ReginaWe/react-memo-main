@@ -226,7 +226,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   function getAchievements() {
     if (status === STATUS_WON) {
       const result = [];
-      if (pairsCount >= 9) {
+      if (pairsCount < 9) {
+        return result;
+      }
+      if (!isEasyMode) {
         result.push(1);
       }
       if (superPower === 0) {
@@ -302,13 +305,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           />
         </div>
       ) : null}
-      {/* <div className={styles.helperWrapper}>
-        <div className={styles.helperHintContainer}>
-          <h2>Прозрение</h2>
-          <p>На 5 секунд показываются все карты. Таймер длительности игры на это время останавливается.</p>
-        </div>
-        <div className={styles.helperHintWrapper} />
-      </div> */}
     </div>
   );
 }
