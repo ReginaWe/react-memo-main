@@ -5,6 +5,9 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import { useGameMode } from "../hooks/useGameMode";
+
+import eyeImageUrl from "./images/eye.svg";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
@@ -41,6 +44,8 @@ function getTimerValue(startDate, endDate) {
  * previewSeconds - сколько секунд пользователь будет видеть все карты открытыми до начала игры
  */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
+  const { isEasyMode } = useGameMode();
+  const [lives, setLives] = useState(isEasyMode ? 3 : 1);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);
   // Текущий статус игры
@@ -51,11 +56,15 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // Дата конца игры
   const [gameEndDate, setGameEndDate] = useState(null);
 
+  const [superPower, setSuperPower] = useState(0);
+
   // Стейт для таймера, высчитывается в setInteval на основе gameStartDate и gameEndDate
   const [timer, setTimer] = useState({
     seconds: 0,
     minutes: 0,
   });
+
+  const [firstCard, setFirstCard] = useState(null);
 
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
@@ -73,6 +82,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
     setStatus(STATUS_PREVIEW);
+    setFirstCard(null);
+    setLives(isEasyMode ? 3 : 1);
+    setSuperPower(0);
   }
 
   /**
@@ -86,6 +98,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     // Если карта уже открыта, то ничего не делаем
     if (clickedCard.open) {
       return;
+    }
+
+    if (!firstCard) {
+      setFirstCard(clickedCard);
     }
     // Игровое поле после открытия кликнутой карты
     const nextCards = cards.map(card => {
@@ -127,11 +143,28 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // "Игрок проиграл", т.к на поле есть две открытые карты без пары
     if (playerLost) {
-      finishGame(STATUS_LOST);
-      return;
+      if (!isEasyMode || lives === 0) {
+        finishGame(STATUS_LOST);
+        return;
+      } else {
+        setTimeout(() => {
+          setLives(prev => prev - 1); /* Что означают prev */
+          setCards(
+            cards.map(card => ({
+              ...card,
+              open: card.open && card.id !== firstCard.id && card.id !== clickedCard.id,
+            })),
+          );
+          setFirstCard(null);
+        }, 500);
+      }
     }
 
     // ... игра продолжается
+
+    if (openCardsWithoutPair.length === 0) {
+      setFirstCard(null);
+    }
   };
 
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
@@ -172,11 +205,45 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     };
   }, [gameStartDate, gameEndDate]);
 
+  useEffect(() => {
+    if (lives === 0) {
+      finishGame(STATUS_LOST);
+    }
+  }, [lives]);
+
+  function handleSuperPower() {
+    /*  if (superPower !== 0) {
+      return;
+    } */
+    setSuperPower(1);
+    setTimeout(() => {
+      gameStartDate.setSeconds(gameStartDate.getSeconds() + 5);
+      /*  setGameStartDate(gameStartDate); */
+      setSuperPower(2);
+    }, 5000);
+  }
+
+  function getAchievements() {
+    if (status === STATUS_WON) {
+      const result = [];
+      if (pairsCount < 9) {
+        return result;
+      }
+      if (!isEasyMode) {
+        result.push(1);
+      }
+      if (superPower === 0) {
+        result.push(2);
+      }
+      return result;
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.timer}>
-          {status === STATUS_PREVIEW ? (
+          {status === STATUS_PREVIEW || superPower === 1 ? (
             <div>
               <p className={styles.previewText}>Запоминайте пары!</p>
               <p className={styles.previewDescription}>Игра начнется через {previewSeconds} секунд</p>
@@ -195,7 +262,22 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             </>
           )}
         </div>
-        {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
+
+        {status === STATUS_IN_PROGRESS && (
+          <>
+            {superPower === 0 && (
+              <div className={styles.helperWrapper}>
+                <div className={styles.helperHintWrapper} />
+                <img className={styles.helperImage} src={eyeImageUrl} alt="eye" onClick={handleSuperPower} />
+                <div className={styles.helperHintContainer}>
+                  <h2>Прозрение</h2>
+                  <p>На 5 секунд показываются все карты. Таймер длительности игры на это время останавливается.</p>
+                </div>
+              </div>
+            )}
+            <Button onClick={resetGame}>Начать заново</Button>
+          </>
+        )}
       </div>
 
       <div className={styles.cards}>
@@ -203,17 +285,20 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           <Card
             key={card.id}
             onClick={() => openCard(card)}
-            open={status !== STATUS_IN_PROGRESS ? true : card.open}
+            open={status !== STATUS_IN_PROGRESS || superPower === 1 ? true : card.open}
             suit={card.suit}
             rank={card.rank}
           />
         ))}
       </div>
 
+      {isEasyMode && <span>Осталось попыток: {lives} </span>}
+
       {isGameEnded ? (
         <div className={styles.modalContainer}>
           <EndGameModal
             isWon={status === STATUS_WON}
+            achievements={getAchievements()}
             gameDurationSeconds={timer.seconds}
             gameDurationMinutes={timer.minutes}
             onClick={resetGame}
