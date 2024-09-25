@@ -148,7 +148,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         return;
       } else {
         setTimeout(() => {
-          setLives(prev => prev - 1); 
+          setLives(prev => prev - 1);
           setCards(
             cards.map(card => ({
               ...card,
