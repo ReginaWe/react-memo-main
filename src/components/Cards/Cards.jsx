@@ -148,7 +148,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         return;
       } else {
         setTimeout(() => {
-          setLives(prev => prev - 1); /* Что означают prev */
+          setLives(prev => prev - 1); 
           setCards(
             cards.map(card => ({
               ...card,
@@ -212,13 +212,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   }, [lives]);
 
   function handleSuperPower() {
-    /*  if (superPower !== 0) {
-      return;
-    } */
     setSuperPower(1);
     setTimeout(() => {
       gameStartDate.setSeconds(gameStartDate.getSeconds() + 5);
-      /*  setGameStartDate(gameStartDate); */
       setSuperPower(2);
     }, 5000);
   }
