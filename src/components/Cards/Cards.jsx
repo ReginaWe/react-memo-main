@@ -298,6 +298,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         <div className={styles.modalContainer}>
           <EndGameModal
             isWon={status === STATUS_WON}
+            isSuperWin={status === STATUS_WON && !isEasyMode && pairsCount >= 9}
             achievements={getAchievements()}
             gameDurationSeconds={timer.seconds}
             gameDurationMinutes={timer.minutes}
