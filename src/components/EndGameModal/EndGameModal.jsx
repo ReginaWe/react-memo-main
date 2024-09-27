@@ -9,8 +9,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
-export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, achievements }) {
-  const title = isWon ? "Вы попали на лидерборд" : "Вы проиграли!";
+export function EndGameModal({ isWon, isSuperWin, gameDurationSeconds, gameDurationMinutes, onClick, achievements }) {
+  const title = isSuperWin ? "Вы попали на лидерборд" : isWon ? "Вы попали на лидерборд" : "Вы проиграли!";
 
   const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
 
@@ -37,7 +37,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
     <div className={styles.modal}>
       <img className={styles.image} src={imgSrc} alt={imgAlt} />
       <h2 className={styles.title}>{title}</h2>
-      {isWon && (
+      {isSuperWin && (
         <>
           <input
             className={cn(styles.inputName, { [styles.error]: !inputValue })}
